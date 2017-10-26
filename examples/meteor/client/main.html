@@ -1,0 +1,17 @@
+<head>
+  <title>s3 uploader</title>
+</head>
+
+<body>
+  {{> info}}
+</body>
+
+<template name="info">
+  <h2>S3 Uploader!</h2>
+
+  <p>{{progress}}%</p>
+
+	<input type="file" class="file_bag" multiple>
+	<button class="upload">upload it</button>
+	<button class="delete">delete it</button>
+</template>

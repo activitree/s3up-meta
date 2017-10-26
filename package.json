@@ -1,0 +1,49 @@
+{
+  "name": "s3up-meta",
+  "version": "1.0.0",
+  "description": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for caching of uploaded files.",
+  "main": "client/index.js",
+  "dependencies": {
+    "aws-sdk": "2.140.0",
+    "crypto-js": "^3.1.9-1",
+    "fibers": "^2.0.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.19.1",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "coffee-script": "^1.12.7",
+    "coffeelint": "^2.0.6"
+  },
+  "maintainers": [
+    {
+      "name": "paulincai",
+      "email": "paulailincai@icloud.com"
+    }
+  ],
+  "scripts": {
+    "make-docs": "npm run prepublish && jsdoc lib -r -d docs && rm -rf lib",
+    "meteor-example": "cd examples/meteor && meteor",
+    "postpublish": "rm -rf jsFromCoffee && rm -rf client && rm -rf server",
+    "prepublish": "coffee --no-header --compile --output jsFromCoffee/ src/ && node_modules/.bin/babel jsFromCoffee -d ./",
+    "reinstall-examples": "npm pack && cd examples/meteor && rm -rf node_modules/s3up && meteor npm i && cd ../../ && npm run postpublish",
+    "test": "coffeelint -f coffeelint.json ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulincai/s3up-meta"
+  },
+  "readme": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for caching of uploaded files.",
+  "readmeFilename": "README.md",
+  "keywords": [
+    "s3",
+    "upload",
+    "multipart",
+    "meteor"
+  ],
+  "author": "paulincai",
+  "license": "MIT",
+  "homepage": "https://github.com/paulincai/s3up-meta"
+}
