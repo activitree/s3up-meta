@@ -1,20 +1,20 @@
 {
   "name": "s3up-meta",
-  "version": "1.0.2",
-  "description": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for caching of uploaded files.",
+  "version": "1.0.3",
+  "description": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for Amazon caching of uploaded files.",
   "main": "client/index.js",
   "dependencies": {
-    "aws-sdk": "2.231.1",
+    "aws-sdk": "2.278.1",
     "crypto-js": "^3.1.9-1",
     "fibers": "^2.0.2",
     "lodash": "^4.17.10",
-    "moment": "^2.22.1",
-    "uuid": "^3.2.1"
+    "moment": "^2.22.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "coffeescript": "^1.12.7",
+    "babel-preset-env": "^1.7.0",
+    "coffeescript": "^2.3.1",
     "coffeelint": "^2.1.0"
   },
   "maintainers": [
@@ -25,10 +25,8 @@
   ],
   "scripts": {
     "make-docs": "npm run prepublish && jsdoc lib -r -d docs && rm -rf lib",
-    "meteor-example": "cd examples/meteor && meteor",
     "postpublish": "rm -rf jsFromCoffee && rm -rf client && rm -rf server",
     "prepublish": "coffee --no-header --compile --output jsFromCoffee/ src/ && node_modules/.bin/babel jsFromCoffee -d ./",
-    "reinstall-examples": "npm pack && cd examples/meteor && rm -rf node_modules/s3up && meteor npm i && cd ../../ && npm run postpublish",
     "test": "coffeelint -f coffeelint.json ./src"
   },
   "repository": {
