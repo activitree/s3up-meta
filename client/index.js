@@ -19,6 +19,6 @@ var _upload_file2 = _interopRequireDefault(_upload_file)
 
 function _interopRequireDefault (obj) { return obj && obj.__esModule ? obj : { default: obj } }
 
-exports.delete_files = _delete_files2.default
-exports.upload_file = _upload_file2.default
-exports.upload_files = _upload_files2.default
+exports.deleteFiles = _delete_files2.default
+exports.uploadFile = _upload_file2.default
+exports.uploadFiles = _upload_files2.default
