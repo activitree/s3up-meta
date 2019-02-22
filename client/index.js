@@ -3,22 +3,22 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 })
-exports.upload_files = exports.upload_file = exports.delete_files = undefined
+exports.uploadFiles = exports.uploadFile = exports.deleteFiles = undefined
 
-var _delete_files = require('./delete_files')
+var _deleteFiles = require('./delete_files')
 
-var _delete_files2 = _interopRequireDefault(_delete_files)
+var _deleteFiles2 = _interopRequireDefault(_deleteFiles)
 
-var _upload_files = require('./upload_files')
+var _uploadFiles = require('./upload_files')
 
-var _upload_files2 = _interopRequireDefault(_upload_files)
+var _uploadFiles2 = _interopRequireDefault(_uploadFiles)
 
-var _upload_file = require('./upload_file')
+var _uploadFile = require('./upload_file')
 
-var _upload_file2 = _interopRequireDefault(_upload_file)
+var _uploadFile2 = _interopRequireDefault(_uploadFile)
 
 function _interopRequireDefault (obj) { return obj && obj.__esModule ? obj : { default: obj } }
 
-exports.deleteFiles = _delete_files2.default
-exports.uploadFile = _upload_file2.default
-exports.uploadFiles = _upload_files2.default
+exports.deleteFiles = _deleteFiles2.default
+exports.uploadFile = _uploadFile2.default
+exports.uploadFiles = _uploadFiles2.default
