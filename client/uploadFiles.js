@@ -53,7 +53,7 @@ exports.default = function (files, ops) {
   })
 }
 
-var _upload_file = require('./upload_file')
+var _upload_file = require('./uploadFile')
 
 var _upload_file2 = _interopRequireDefault(_upload_file)
 

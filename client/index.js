@@ -5,15 +5,15 @@ Object.defineProperty(exports, '__esModule', {
 })
 exports.uploadFiles = exports.uploadFile = exports.deleteFiles = undefined
 
-var _deleteFiles = require('./delete_files')
+var _deleteFiles = require('./deleteFiles')
 
 var _deleteFiles2 = _interopRequireDefault(_deleteFiles)
 
-var _uploadFiles = require('./upload_files')
+var _uploadFiles = require('./uploadFiles')
 
 var _uploadFiles2 = _interopRequireDefault(_uploadFiles)
 
-var _uploadFile = require('./upload_file')
+var _uploadFile = require('./uploadFile')
 
 var _uploadFile2 = _interopRequireDefault(_uploadFile)
 
