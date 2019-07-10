@@ -1,9 +1,7 @@
 # S3 Uploads
 
 ### NOTES
-This is an upgrade to the original atmosphere S3 project meant to work on React, React Native, and Blaze.
-**THE API IS COMPLETELY DIFFERENT**
-This is an update of a package by Lepozepo where metadata {Cache_Control: ...., Expires: ....} has been added in order to control caching of S3 files.
+This is a rewrite of a package by Lepozepo where metadata {Cache_Control: ...., Expires: ....} has been added in order to control caching of S3 files.
 
 ## Installation
 
