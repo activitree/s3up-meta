@@ -14,62 +14,134 @@ $ npm i --save s3up-meta
 ## How to use
 
 ### Step 1
-Instantiate your Authorizer. **SERVER SIDE**
+Add your AWS configuration to your settings:
 
-``` javascript
-import { authorizer as Authorizer } from 's3up-meta/server';
+In your settings.json :
 
-const authorizer = new Authorizer({
-	key: 'key',
-	secret: 'secret',
-	// All other defaults go here
-	bucket:"bucket",
-	region:"region",
-});
+```
+{
+  "private": {
+    "s3": {
+      "key": "xxxxxx",
+      "secret": "xxxxxxxxxxxxxx",
+      "bucket": "xxxxxxxxxxxxxx",
+      "region": "eu-central-1"
+    }
+  }
+}
+
 ```
 
 ### Step 2
-Set up your authorizers functions. Here is an example in Meteor. **SERVER SIDE**
+Set up your authorizers functions. This could be in your startup/server. **SERVER SIDE**
 
-``` javascript
+```
+import { Meteor } from 'meteor/meteor'
+import { authorizer as Authorizer } from 's3up-meta/server'
+
+/**
+ * S3 image upload and delete methods. Although they are server side, the file upload is
+ * directly from client to S3
+ */
+
+const services = Meteor.settings.private.s3
+const authorizer = new Authorizer(services)
+
 Meteor.methods({
-	authorize_upload: function(ops) {
-		this.unblock();
-		return authorizer.authorize_upload(ops);
-	},
-	authorize_delete: function(ops) {
-		this.unblock();
-		return authorizer.authorize_delete(ops);
-	},
+  authorize_upload: function (ops, metadata) {
+    this.unblock()
+    return authorizer.authorize_upload(metadata, ops)
+  },
+  authorize_delete: function (ops) {
+    this.unblock()
+    return authorizer.authorize_delete(ops)
+  }
 })
+
 ```
 
 ### Step 3
-Wire up your views with the upload and delete functions. Here is an example with Meteor Blaze's template events. **CLIENT SIDE**
+Sign the upload. Receive the signature from Meteor server and use it to upload from client directly to S3. **CLIENT SIDE**
+Example as a Redux action, please extrapolate to a method of your convenience.
+
+Concept: before start of upload trigger the showing of a spinner. If, for instance, you replace an avatar image, call the upload of a new image and on success, call delete of the old avatar.
 
 ``` javascript
-import { upload_files, delete_files } from 's3up/client';
+import { Meteor } from 'meteor/meteor'
+import { deleteFiles, uploadFile } from 's3up-meta/client'
+import b64toBlob from '../../helpers/b64toBlob' // I use my own blob library
 
-Template.example.events({
-	'click .upload': function(event, instance) {
-		upload_files(instance.$("input.file_bag")[0].files, {
-			authorizer: Meteor.call.bind(this, "authorize_upload"),
-			upload_event: function(err, res) {
-				console.log({err, ...res});
-				console.log(res.total_percent_uploaded);
-			},
-		});
-	},
-	'click .delete': function(event, instance) {
-		delete_files({
-			authorizer: Meteor.call.bind(this, "authorize_delete"),
-			paths: ["someImage.jpg"],
-			deleteComplete: function(err, res) {
-				console.log({err, res});
-			},
-		})
-	},
-});
+export const UPLOAD_IMAGE_AWS = 'UPLOAD_IMAGE_AWS' // this should return a image URL as payload
+export const DELETE_IMAGE_AWS = 'DELETE_IMAGE_AWS'
+export const SET_STATE_UPLOADER = 'SET_STATE_UPLOADER'
+
+const setStateUploader = states => {
+  return {
+    type: SET_STATE_UPLOADER,
+    payload: states
+  }
+}
+
+const uploadImageAWS = (imageData, path, size) => {
+  if (!imageData || !path) {
+    return {
+      type: UPLOAD_IMAGE_AWS,
+      payload: null
+    }
+  }
+  return dispatch => {
+    dispatch(setStateUploader({ showUploadSpinner: true })) // from the action above
+    let blobData = imageData.slice(23)
+    const metadata = { CacheControl: 'max-age=8460000', Expires: 'Thu, 15 Dec 2050 04:08:00 GMT' } // this is a veeeeery long time
+    blobData = b64toBlob(blobData, 'image/jpeg')
+    path = path === 'post' ? 'postsProxy' : 'avatar' // just some conditions to send the file in S3 to one folder or another
+    uploadFile(blobData, {
+      authorizer: Meteor.call.bind(this, 'authorize_upload', metadata), // authorization so I can write in S3
+      path, // to where I write in my bucket in S3
+      type: 'image/jpeg', // or something else...PNG, PDF etc
+      metadata, // see this constant above
+      upload_event: (err, res) => {
+        if (err) {
+          dispatch({
+            type: SET_STATE_UPLOADER,
+            payload: null
+          })
+        } else {
+          if (res.relative_url) {
+	  // the rest below is irelevant, it can be whatever you need it to be. Just make use of res.relative_url...	
+            
+	    let image = null
+            if (path === 'avatar' || path === 'covers') { image = res.relative_url.substring(8) } else if (path === 'postsProxy') { image = res.relative_url.substring(12) }
+            const payload = path === 'postsProxy' ? { postImage: image, size } : path === 'covers' ? { coverImage: image, size } : { avatarImage: image, size }
+            dispatch({
+              type: UPLOAD_IMAGE_AWS,
+              payload
+            })
+          }
+        }
+      }
+    })
+  }
+}
+
+const deleteImageAWS = (path, oldImage) => {
+  return dispatch => {
+    const paths = path === 'avatar' ? [`avatar/${oldImage}`, `avatar-h/${oldImage}`] : [`${path}/${oldImage}`] // I delete 2 avatar sizes.
+    if (oldImage) {
+      deleteFiles({
+        authorizer: Meteor.call.bind(this, 'authorize_delete'),
+        paths,
+        deleteComplete: (err, res) => {
+          dispatch({
+            type: DELETE_IMAGE_AWS,
+            payload: err ? { err } : 'OK'
+          })
+        }
+      })
+    }
+  }
+}
+
 ```
 
 Notice how both `upload_files` and `delete_files` require an `authorizer` function to communicate with the server. In Meteor this is a `Meteor.method` but you can use anything.
