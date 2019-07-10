@@ -81,6 +81,7 @@ exports.default = function (file, arg) {
     form_data.append('file', file)
     xhr = new XMLHttpRequest()
     xhr.upload.addEventListener('progress', function (event) {
+      Session.set('glimpseUp', Math.floor(event.loaded / event.total * 100))
       return upload_event(null, (0, _extend2.default)(file_data, {
         loaded: event.loaded,
         total: event.total,
