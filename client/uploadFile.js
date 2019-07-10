@@ -91,6 +91,7 @@ exports.default = function (file, arg) {
     }, false)
     xhr.addEventListener('load', function () {
       if (xhr.status < 400) {
+        delete Session.keys.glimpseUp
         return upload_event(null, (0, _extend2.default)(file_data, {
           percent_uploaded: 100,
           url: signature.url,
