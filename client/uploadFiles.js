@@ -57,23 +57,23 @@ var _upload_file = require('./uploadFile')
 
 var _upload_file2 = _interopRequireDefault(_upload_file)
 
-var _times = require('lodash/times')
+var _times = require('lodash.times')
 
 var _times2 = _interopRequireDefault(_times)
 
-var _extend = require('lodash/extend')
+var _extend = require('lodash.assignin')
 
 var _extend2 = _interopRequireDefault(_extend)
 
-var _findIndex = require('lodash/findIndex')
+var _findIndex = require('lodash.findindex')
 
 var _findIndex2 = _interopRequireDefault(_findIndex)
 
-var _reduce = require('lodash/reduce')
+var _reduce = require('lodash.reduce')
 
 var _reduce2 = _interopRequireDefault(_reduce)
 
-var _every = require('lodash/every')
+var _every = require('lodash.every')
 
 var _every2 = _interopRequireDefault(_every)
 

@@ -128,27 +128,23 @@ var _v = require('uuid/v4')
 
 var _v2 = _interopRequireDefault(_v)
 
-var _isString = require('lodash/isString')
+var _isString = require('lodash.isstring')
 
 var _isString2 = _interopRequireDefault(_isString)
 
-var _last = require('lodash/last')
+var _last = require('lodash.last')
 
 var _last2 = _interopRequireDefault(_last)
 
-var _isFunction = require('lodash/isFunction')
-
-var _isFunction2 = _interopRequireDefault(_isFunction)
-
-var _isEmpty = require('lodash/isEmpty')
+var _isEmpty = require('lodash.isempty')
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty)
 
-var _noop = require('lodash/noop')
+var _noop = require('lodash.noop')
 
 var _noop2 = _interopRequireDefault(_noop)
 
-var _extend = require('lodash/extend')
+var _extend = require('lodash.assignin')
 
 var _extend2 = _interopRequireDefault(_extend)
 

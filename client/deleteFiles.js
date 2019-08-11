@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', {
 })
 
 exports.default = function (arg) {
-  var authorizer, deleteComplete, paths, ref, ref1
+  let authorizer, deleteComplete, paths, ref, ref1
   authorizer = arg.authorizer, paths = (ref = arg.paths) != null ? ref : [], deleteComplete = (ref1 = arg.deleteComplete) != null ? ref1 : _noop2.default
   if (!authorizer) {
     throw new Error('authorizer is required')
@@ -15,8 +15,8 @@ exports.default = function (arg) {
   }, deleteComplete)
 }
 
-var _noop = require('lodash/noop')
+const _noop = require('lodash.noop')
 
-var _noop2 = _interopRequireDefault(_noop)
+const _noop2 = _interopRequireDefault(_noop)
 
 function _interopRequireDefault (obj) { return obj && obj.__esModule ? obj : { default: obj } }

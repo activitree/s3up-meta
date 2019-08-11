@@ -18,11 +18,11 @@ var _moment = require('moment')
 
 var _moment2 = _interopRequireDefault(_moment)
 
-var _isEmpty = require('lodash/isEmpty')
+var _isEmpty = require('lodash.isempty')
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty)
 
-var _isArray = require('lodash/isArray')
+var _isArray = require('lodash.isarray')
 
 var _isArray2 = _interopRequireDefault(_isArray)
 
