@@ -22,10 +22,6 @@ var _isEmpty = require('lodash.isempty')
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty)
 
-var _isArray = require('lodash.isarray')
-
-var _isArray2 = _interopRequireDefault(_isArray)
-
 var _s = require('aws-sdk/clients/s3')
 
 var _s2 = _interopRequireDefault(_s)
@@ -144,9 +140,9 @@ Authorizer = function () {
   }
 
   Authorizer.prototype.authorize_delete = function (arg) {
-    var delete_params, delete_promise, future, paths, ref
+    let delete_params, delete_promise, future, paths, ref
     paths = (ref = arg.paths) != null ? ref : []
-    if (!(0, _isArray2.default)(paths)) {
+    if (!Array.isArray(paths)) {
       paths = [paths]
     }
     paths = paths.map(function (path) {
