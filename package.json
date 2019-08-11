@@ -1,11 +1,12 @@
 {
   "name": "s3up-meta",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for Amazon caching of uploaded files.",
   "main": "client/index.js",
   "dependencies": {
     "aws-sdk": "^2.507.0",
     "crypto-js": "^3.1.9-1",
+    "dayjs": "^1.8.15",
     "fibers": "^4.0.1",
     "lodash.assignin": "^4.2.0",
     "lodash.every": "^4.6.0",
@@ -17,7 +18,6 @@
     "lodash.noop": "^3.0.1",
     "lodash.reduce": "^4.6.0",
     "lodash.times": "^4.3.2",
-    "moment": "^2.24.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

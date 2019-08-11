@@ -14,9 +14,9 @@ var _v = require('uuid/v4')
 
 var _v2 = _interopRequireDefault(_v)
 
-var _moment = require('moment')
+var _dayjs = require('dayjs')
 
-var _moment2 = _interopRequireDefault(_moment)
+var _dayjs2 = _interopRequireDefault(_dayjs)
 
 var _isEmpty = require('lodash.isempty')
 
@@ -82,8 +82,8 @@ Authorizer = function () {
       key = path + '/' + file_name
     }
     meta_uuid = (0, _v2.default)()
-    meta_date = (0, _moment2.default)().format('YYYYMMDD') + 'T000000Z'
-    meta_credential = this.key + '/' + (0, _moment2.default)().format('YYYYMMDD') + '/' + region + '/s3/aws4_request'
+    meta_date = (0, _dayjs2.default)().format('YYYYMMDD') + 'T000000Z'
+    meta_credential = this.key + '/' + (0, _dayjs2.default)().format('YYYYMMDD') + '/' + region + '/s3/aws4_request'
 
     policy = {
       'expiration': expiration_date,
