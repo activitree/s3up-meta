@@ -1,6 +1,9 @@
 /* eslint-disable camelcase */
 
 'use strict'
+import dayjs from 'dayjs'
+import s3 from 'aws-sdk/clients/s3'
+import future from 'fibers/future'
 
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -14,7 +17,7 @@ var _v = require('uuid/v4')
 
 var _v2 = _interopRequireDefault(_v)
 
-var _dayjs = require('dayjs')
+var _dayjs = dayjs
 
 var _dayjs2 = _interopRequireDefault(_dayjs)
 
@@ -22,11 +25,11 @@ var _isEmpty = require('lodash.isempty')
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty)
 
-var _s = require('aws-sdk/clients/s3')
+var _s = s3
 
 var _s2 = _interopRequireDefault(_s)
 
-var _future = require('fibers/future')
+var _future = future
 
 var _future2 = _interopRequireDefault(_future)
 
