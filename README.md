@@ -6,7 +6,7 @@ This is a rewrite of a package by Lepozepo where metadata {Cache_Control: ...., 
 ## Installation
 
 ``` sh
-$ npm i --save s3up-meta
+$ npm i --save s3up-meta@git+https://github.com/paulincai/s3up-meta.git
 ```
 
 ## How to use
