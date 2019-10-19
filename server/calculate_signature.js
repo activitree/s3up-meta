@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
+
 'use strict'
-import dayjs from 'dayjs'
 
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -20,7 +20,7 @@ var _cryptoJs = require('crypto-js')
 
 var _cryptoJs2 = _interopRequireDefault(_cryptoJs)
 
-var _dayjs = dayjs
+var _dayjs = require('dayjs')
 
 var _dayjs2 = _interopRequireDefault(_dayjs)
 
