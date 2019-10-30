@@ -1,5 +1,7 @@
 # S3 Uploads
 
+<a href="https://www.repostatus.org/#active"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed." /></a>
+
 ### NOTES
 This is a rewrite of a package by Lepozepo where metadata {Cache_Control: ...., Expires: ....} has been added in order to control caching of S3 files.
 
