@@ -10,7 +10,7 @@ var _calculate_signature = require('./calculate_signature')
 
 var _calculate_signature2 = _interopRequireDefault(_calculate_signature)
 
-var _v = require('uuid/v4')
+var { v4: _v } = require('uuid')
 
 var _v2 = _interopRequireDefault(_v)
 

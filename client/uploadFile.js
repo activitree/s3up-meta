@@ -124,7 +124,7 @@ var _b64toBlob = require('./b64toBlob')
 
 var _b64toBlob2 = _interopRequireDefault(_b64toBlob)
 
-var _v = require('uuid/v4')
+var { v4: _v } = require('uuid')
 
 var _v2 = _interopRequireDefault(_v)
 
