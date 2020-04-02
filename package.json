@@ -1,12 +1,12 @@
 {
   "name": "s3up-meta",
-  "version": "1.1.1",
-  "description": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for Amazon caching of uploaded files.",
+  "version": "1.2.0",
+  "description": "Upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for Amazon caching of uploaded files.",
   "main": "client/index.js",
   "dependencies": {
-    "aws-sdk": "^2.629.0",
+    "aws-sdk": "^2.651.0",
     "crypto-js": "^4.0.0",
-    "dayjs": "^1.8.21",
+    "dayjs": "^1.8.23",
     "fibers": "^4.0.2",
     "lodash.assignin": "^4.2.0",
     "lodash.every": "^4.6.0",
@@ -18,14 +18,7 @@
     "lodash.noop": "^3.0.1",
     "lodash.reduce": "^4.6.0",
     "lodash.times": "^4.3.2",
-    "uuid": "^7.0.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.6",
-    "@babel/preset-env": "^7.8.6",
-    "coffeelint": "^2.1.0",
-    "coffeescript": "^2.5.1"
+    "uuid": "^7.0.3"
   },
   "maintainers": [
     {
@@ -33,17 +26,12 @@
       "email": "paulailincai@icloud.com"
     }
   ],
-  "scripts": {
-    "make-docs": "npm run prepublish && jsdoc lib -r -d docs && rm -rf lib",
-    "postpublish": "rm -rf jsFromCoffee && rm -rf client && rm -rf server",
-    "prepublish": "coffee --no-header --compile --output jsFromCoffee/ src/ && node_modules/.bin/babel jsFromCoffee -d ./",
-    "test": "coffeelint -f coffeelint.json ./src"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/activitree/s3up-meta"
   },
-  "readme": "A simple function to upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for caching of uploaded files.",
+  "readme": "Upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for caching of uploaded files.",
   "readmeFilename": "README.md",
   "keywords": [
     "s3",
