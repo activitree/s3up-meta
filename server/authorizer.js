@@ -35,7 +35,7 @@ class Authorizer {
     })
   }
 
-  authorize_upload({ expiration = this.expiration, path = this.path , file_type, file_name, file_size, acl = this.acl, bucket = this.bucket, region = this.region }) {
+  authorize_upload({ expiration = this.expiration, path = this.path , file_type, file_name, file_size, acl = this.acl, bucket = this.bucket, region = this.region, metadata }) {
     if (isEmpty(file_name)) {
       throw new Error('file_name cannot be empty')
     }
@@ -47,6 +47,9 @@ class Authorizer {
     if (isFinite(file_size) && (file_size <= 0)) {
       throw new Error('file_size cannot be less than or equal to 0')
     }
+
+    const cache_control = (metadata && metadata.CacheControl) || 'no-cache'
+    const expires = (metadata && metadata.Expires) || '0'
 
     let expiration_date = new Date(Date.now() + expiration)
     expiration_date = expiration_date.toISOString()
@@ -68,6 +71,8 @@ class Authorizer {
         {key},
         {bucket},
         {'Content-Type': file_type},
+        {'Cache-Control': cache_control},
+        {'Expires': expires},
         {acl},
         // {'x-amz-server-side-encryption': 'AES256'}
         {'x-amz-algorithm': 'AWS4-HMAC-SHA256'},
