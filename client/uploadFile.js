@@ -94,42 +94,31 @@ export default (file, { _id = uuid(), encoding = '', file_name = true, authorize
       // Send data
       const xhr = new XMLHttpRequest()
       xhr.upload.addEventListener('progress', event => upload_event(null, Object.assign(file_data, {
-          loaded:event.loaded,
-          total:event.total,
-          percent_uploaded: Math.floor(((event.loaded / event.total) * 100)),
-          status:'uploading'
-        }
-        )
-        )
-        ,false)
+        loaded:event.loaded,
+        total:event.total,
+        percent_uploaded: Math.floor(((event.loaded / event.total) * 100)),
+        status:'uploading'
+      })), false)
 
       xhr.addEventListener('load', function() {
         if (xhr.status < 400) {
           return upload_event(null, Object.assign(file_data, {
-              percent_uploaded: 100,
-              url:signature.url,
-              secure_url:signature.secure_url,
-              relative_url:signature.relative_url,
-              status:'complete'
-            }
-            )
-          )
+            percent_uploaded: 100,
+            url:signature.url,
+            secure_url:signature.secure_url,
+            relative_url:signature.relative_url,
+            status:'complete'
+          }))
         } else {
-          return upload_event(new Error('Upload Failed Request Failed'), Object.assign(file_data,
-            {status:'error'})
-          )
+          return upload_event(new Error('Upload Failed Request Failed'), Object.assign(file_data, { status:'error' }))
         }
       })
 
-      xhr.addEventListener('error', () => upload_event(new Error('Upload Failed Network Error'), Object.assign(file_data,
-        {status:'error'})
-      ))
+      xhr.addEventListener('error', () => upload_event(new Error('Upload Failed Network Error'), Object.assign(file_data, { status:'error' })))
 
-      xhr.addEventListener('abort', () => upload_event(new Error('Upload Failed User Aborted'), Object.assign(file_data,
-        {status:'abort'})
-      ))
+      xhr.addEventListener('abort', () => upload_event(new Error('Upload Failed User Aborted'), Object.assign(file_data, {status:'abort'})))
 
-      xhr.open('POST',signature.post_url,true)
+      xhr.open('POST', signature.post_url,true)
 
       return xhr.send(form_data)
     })

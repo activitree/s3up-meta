@@ -35,7 +35,7 @@ class Authorizer {
     })
   }
 
-  authorize_upload({ expiration = this.expiration, path = this.path , file_type, file_name, file_size, acl = this.acl, bucket = this.bucket, region = this.region, metadata }) {
+  authorize_upload({ expiration = this.expiration, path = this.path , file_type, file_name, file_size, acl = this.acl, bucket = this.bucket, region = this.region }, metadata) {
     if (isEmpty(file_name)) {
       throw new Error('file_name cannot be empty')
     }
@@ -53,8 +53,8 @@ class Authorizer {
 
     let expiration_date = new Date(Date.now() + expiration)
     expiration_date = expiration_date.toISOString()
-  
-    let key 
+
+    let key
     if (isEmpty(path)) {
       key = `${file_name}`
     } else {
