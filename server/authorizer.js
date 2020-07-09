@@ -2,7 +2,6 @@ import calculate_signature from "./calculate_signature"
 import uuid from 'uuid/v4'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash.isempty'
-import isArray from 'lodash.isarray'
 import S3 from 'aws-sdk/clients/s3'
 import Future from 'fibers/future'
 
@@ -122,7 +121,7 @@ class Authorizer {
   }
 
   authorize_delete({ paths = [] }) {
-    if (!isArray(paths)) {
+    if (!Array.isArray(paths)) {
       paths = [paths]
     }
 
