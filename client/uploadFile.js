@@ -1,3 +1,4 @@
+/* globals Session */
 import b64toBlob from './b64toBlob'
 import uuid from 'uuid/v4'
 
@@ -93,15 +94,19 @@ export default (file, { _id = uuid(), encoding = '', file_name = true, authorize
 
       // Send data
       const xhr = new XMLHttpRequest()
-      xhr.upload.addEventListener('progress', event => upload_event(null, Object.assign(file_data, {
-        loaded:event.loaded,
-        total:event.total,
-        percent_uploaded: Math.floor(((event.loaded / event.total) * 100)),
-        status:'uploading'
-      })), false)
+      xhr.upload.addEventListener('progress', event => {
+        Session.set('glimpseUp', Math.floor(event.loaded / event.total * 100))
+        return upload_event(null, Object.assign(file_data, {
+          loaded:event.loaded,
+          total:event.total,
+          percent_uploaded: Math.floor(((event.loaded / event.total) * 100)),
+          status:'uploading'
+        }))
+      }, false)
 
       xhr.addEventListener('load', function() {
         if (xhr.status < 400) {
+          delete Session.keys.glimpseUp
           return upload_event(null, Object.assign(file_data, {
             percent_uploaded: 100,
             url:signature.url,
