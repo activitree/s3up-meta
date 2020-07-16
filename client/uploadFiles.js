@@ -1,5 +1,4 @@
 import upload_file from './uploadFile'
-import times from 'lodash.times'
 import findIndex from 'lodash.findindex'
 import reduce from 'lodash.reduce'
 import every from 'lodash.every'
@@ -12,17 +11,21 @@ export default (files, ops) => {
 
   const files_data = []
 
-  return times(number_of_files, n => upload_file(files[n], Object.assign(ops, {
+  return files.map(file => {
+    const fileImage = file.image
+    const fileSize = file.size
+    upload_file(fileImage, Object.assign(ops, {
       upload_event(err, res) {
         if (err) {
           if (typeof upload_event === 'function') {
-            upload_event(err, Object.assign(res, {total_percent_uploaded}))
+            upload_event(err, Object.assign(res, { total_percent_uploaded }))
           }
           total_percent_uploaded = 0
           return
         }
 
         if (res.status === "authorizing") {
+          res.size = file.size
           files_data.push(res)
         }
 
@@ -44,6 +47,6 @@ export default (files, ops) => {
 
         return (typeof upload_event === 'function' ? upload_event(null, { ...res, total_percent_uploaded: total_percent_uploaded, completed: completed }) : undefined)
       }
-    })
-  ))
+    }))
+  })
 }

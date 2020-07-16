@@ -121,7 +121,7 @@ export default (file, { _id = uuid(), encoding = '', file_name = true, authorize
 
       xhr.addEventListener('error', () => upload_event(new Error('Upload Failed Network Error'), Object.assign(file_data, { status:'error' })))
 
-      xhr.addEventListener('abort', () => upload_event(new Error('Upload Failed User Aborted'), Object.assign(file_data, {status:'abort'})))
+      xhr.addEventListener('abort', () => upload_event(new Error('Upload Failed User Aborted'), Object.assign(file_data, { status:'abort' })))
 
       xhr.open('POST', signature.post_url,true)
 
