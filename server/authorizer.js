@@ -1,5 +1,5 @@
 import calculate_signature from "./calculate_signature"
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash.isempty'
 import S3 from 'aws-sdk/clients/s3'
@@ -61,7 +61,7 @@ class Authorizer {
       key = `${path}/${file_name}`
     }
 
-    const meta_uuid = uuid();
+    const meta_uuid = uuidv4();
     const meta_date = `${dayjs().format('YYYYMMDD')}T000000Z`
     const meta_credential = `${this.key}/${dayjs().format('YYYYMMDD')}/${region}/s3/aws4_request`
     let policy = {
