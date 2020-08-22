@@ -19,7 +19,7 @@ import Future from 'fibers/future'
  * @return {Object}               Returns the signature object to use for uploading
  */
 class Authorizer {
-  constructor({ secret, key, bucket, region = 'us-east-1', path = '', expiration = 1800000, acl = 'public-read'}) {
+  constructor({ secret = '', key = '', bucket = '', region = 'us-east-1', path = '', expiration = 1800000, acl = 'public-read'}) {
     this.secret = secret
     this.key = key
     this.bucket = bucket
