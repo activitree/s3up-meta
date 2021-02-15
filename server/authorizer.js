@@ -2,7 +2,7 @@ import calculate_signature from "./calculate_signature"
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash.isempty'
-import S3 from 'aws-sdk/clients/s3'
+import { S3 } from '@aws-sdk/client-s3'
 import Future from 'fibers/future'
 
 /**
