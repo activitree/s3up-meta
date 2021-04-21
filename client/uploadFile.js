@@ -1,13 +1,13 @@
 /* globals Session */
 import b64toBlob from './b64toBlob'
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 
 import isString from 'lodash.isstring'
 import last from 'lodash.last'
 import isEmpty from 'lodash.isempty'
 import noop from 'lodash.noop'
 
-export default (file, { _id = uuid(), encoding = '', file_name = true, authorizer, metadata, path, acl, bucket, region, expiration, upload_event = noop}) => {
+export default (file, { _id = uuidv4(), encoding = '', file_name = true, authorizer, metadata, path, acl, bucket, region, expiration, upload_event = noop}) => {
   // Check required vars
   const cache_control = metadata.CacheControl || 'no-cache'
   const expires = metadata.Expires || '0'
@@ -29,7 +29,7 @@ export default (file, { _id = uuid(), encoding = '', file_name = true, authorize
         extension = file.type.split('/')[1] // a library of extensions based on MIME types would be better
       }
 
-      file_name = `${uuid()}.${extension}`
+      file_name = `${uuidv4()}.${extension}`
       break
 
     case 'function':
