@@ -1,6 +1,6 @@
 {
   "name": "s3up-meta",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Upload files to Amazon S3. Refactored from s3up by Lepozepo and added metadata for Amazon caching of uploaded files.",
   "main": "client/index.js",
   "dependencies": {

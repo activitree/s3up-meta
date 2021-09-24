@@ -2,7 +2,7 @@ import calculate_signature from "./calculate_signature"
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash.isempty'
-import { S3 } from '@aws-sdk/client-s3'
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import Future from 'fibers/future'
 
 /**
@@ -27,7 +27,7 @@ class Authorizer {
     this.path = path
     this.expiration = expiration
     this.acl = acl
-    this.SDK = new S3({
+    this.SDK = new S3Client({
       secretAccessKey: secret,
       accessKeyId: key,
       bucket: bucket,
@@ -125,35 +125,26 @@ class Authorizer {
     }
   }
 
-  authorize_delete({ paths = [] }) {
+  deleteServerSide({ paths = [] }) {
     if (!Array.isArray(paths)) {
       paths = [paths]
     }
-
     paths = paths.map(path => ({
       Key:path
     }))
 
-    const delete_params = {
-      Bucket:this.bucket,
+    const input = {
+      Bucket: this.bucket,
       Delete: {
-        Objects:paths
+        Objects: paths,
+        Quiet: true
       }
     }
 
-    const delete_promise = this.SDK.deleteObjects(delete_params)
-      .promise()
-
-    const future = new Future()
-    delete_promise.then(function(err, res) {
-      if ((res != null ? res.Errors.length : undefined) > 0) {
-        return future.return(new Error(res.Errors), null)
-      } else {
-        return future.return(err, res)
-      }
+    const command = new DeleteObjectCommand(input)
+    this.SDK.send(command, err => {
+      if (err) { console.log(err) }
     })
-
-    return future.wait()
   }
 }
 
