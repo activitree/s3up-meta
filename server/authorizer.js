@@ -2,7 +2,7 @@ import calculate_signature from "./calculate_signature"
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash.isempty'
-import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
+import { S3 } from '@aws-sdk/client-s3'
 
 /**
  * Creates an object for the client to consume as a signature to authorize a file upload into Amazon S3
@@ -26,7 +26,7 @@ class Authorizer {
     this.path = path
     this.expiration = expiration
     this.acl = acl
-    this.SDK = new S3Client({
+    this.SDK = new S3({
       secretAccessKey: secret,
       accessKeyId: key,
       bucket: bucket,
@@ -128,21 +128,20 @@ class Authorizer {
     if (!Array.isArray(paths)) {
       paths = [paths]
     }
-    paths = paths.map(path => ({
-      Key:path
+    const deletePaths = paths?.map(path => ({
+      Key: path
     }))
 
     const input = {
       Bucket: this.bucket,
       Delete: {
-        Objects: paths,
+        Objects: deletePaths,
         Quiet: true
       }
     }
 
-    const command = new DeleteObjectCommand(input)
-    this.SDK.send(command, err => {
-      if (err) { console.log(err) }
+    this.SDK.deleteObjects(input, err => {
+      if (err) { console.log({ err }) }
     })
   }
 }
