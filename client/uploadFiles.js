@@ -1,4 +1,4 @@
-import upload_file from './uploadFile'
+import uploadFile from './uploadFile'
 import findIndex from 'lodash.findindex'
 import reduce from 'lodash.reduce'
 import every from 'lodash.every'

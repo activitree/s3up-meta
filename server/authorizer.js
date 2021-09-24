@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash.isempty'
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
-import Future from 'fibers/future'
 
 /**
  * Creates an object for the client to consume as a signature to authorize a file upload into Amazon S3
@@ -35,7 +34,7 @@ class Authorizer {
     })
   }
 
-  authorize_upload({ expiration = this.expiration, path = this.path , file_type, file_name, file_size, acl = this.acl, bucket = this.bucket, region = this.region }, metadata) {
+  authorizeUpload({ expiration = this.expiration, path = this.path , file_type, file_name, file_size, acl = this.acl, bucket = this.bucket, region = this.region }, metadata) {
     if (isEmpty(file_name)) {
       throw new Error('file_name cannot be empty')
     }

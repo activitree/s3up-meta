@@ -48,9 +48,9 @@ const services = Meteor.settings.private.s3
 const authorizer = new Authorizer(services)
 
 Meteor.methods({
-  authorize_upload: function (ops, metadata) {
+  authorizeUpload: function (ops, metadata) {
     this.unblock()
-    return authorizer.authorize_upload(metadata, ops)
+    return authorizer.authorizeUpload(metadata, ops)
   },
   authorize_delete: function (ops) {
     this.unblock()
@@ -96,7 +96,7 @@ const uploadImageAWS = (imageData, path, size) => {
     blobData = b64toBlob(blobData, 'image/jpeg')
     path = path === 'post' ? 'postsProxy' : 'avatar' // just some conditions to send the file in S3 to one folder or another
     uploadFile(blobData, {
-      authorizer: Meteor.call.bind(this, 'authorize_upload', metadata), // authorization so I can write in S3
+      authorizer: Meteor.call.bind(this, 'authorizeUpload', metadata), // authorization so I can write in S3
       path, // to where I write in my bucket in S3
       type: 'image/jpeg', // or something else...PNG, PDF etc
       metadata, // see this constant above
@@ -144,7 +144,8 @@ const deleteImageAWS = (path, oldImage) => {
 
 ```
 
-Notice how both `upload_files` and `delete_files` require an `authorizer` function to communicate with the server. In Meteor this is a `Meteor.method` but you can use anything.
+Notice how `upload_files` require an `authorizer` function to communicate with the server. In Meteor this is a `Meteor.method` but you can use anything.
+deleteFiles takes place server side. File keys (S3 paths) are being sent to the Meteor server for deletion. Does not require authorisation since this doesn't require the slingshot principle (uploading from client directly to S3)
 
 ## Create your Amazon S3
 
