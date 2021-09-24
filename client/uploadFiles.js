@@ -4,7 +4,7 @@ import reduce from 'lodash.reduce'
 import every from 'lodash.every'
 
 export default (files, ops) => {
-  const number_of_files = files.length
+  // const number_of_files = files.length
   const { upload_event } = ops
   let total_percent_uploaded = 0
   let completed = false
@@ -13,8 +13,8 @@ export default (files, ops) => {
 
   return files.map(file => {
     const fileImage = file.image
-    const fileSize = file.size
-    upload_file(fileImage, Object.assign(ops, {
+    // const fileSize = file.size
+    uploadFile(fileImage, Object.assign(ops, {
       upload_event(err, res) {
         if (err) {
           if (typeof upload_event === 'function') {
