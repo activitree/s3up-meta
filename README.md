@@ -7,9 +7,14 @@ This is a rewrite of a package by Lepozepo where metadata {Cache_Control: ...., 
 
 ## Installation
 
+Requries Meteor Session
+
 ``` sh
-$ npm i --save s3up-meta@git+https://github.com/paulincai/s3up-meta.git
+meteor add session
+npm i --save s3up-meta@git+https://github.com/paulincai/s3up-meta.git @aws-sdk/client-s3
 ```
+Session is used to avail of the upload % without triggering a React component refresh. Other techniques may be used.
+
 
 ## How to use
 
