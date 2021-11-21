@@ -7,9 +7,14 @@ This is a rewrite of a package by Lepozepo where metadata {Cache_Control: ...., 
 
 ## Installation
 
+Requries Meteor Session
+
 ``` sh
-$ npm i --save s3up-meta@git+https://github.com/paulincai/s3up-meta.git
+meteor add session
+npm i --save s3up-meta@git+https://github.com/paulincai/s3up-meta.git @aws-sdk/client-s3
 ```
+Session is used to avail of the upload % without triggering a React component refresh. Other techniques may be used.
+
 
 ## How to use
 
@@ -37,25 +42,64 @@ Set up your authorizers functions. This could be in your startup/server. **SERVE
 
 ```
 import { Meteor } from 'meteor/meteor'
-import { authorizer as Authorizer } from 's3up-meta/server'
+import { authorizer as Authorizer } from '@activitree/s3up-meta/server'
 
 /**
  * S3 image upload and delete methods. Although they are server side, the file upload is
- * directly from client to S3
+ * directly from client to S3. Delete happens only server side.
  */
 
-const services = Meteor.settings.private.s3
+let services = {
+  key: '',
+  secret: '',
+  bucket: 'missing',
+  region: 'eu-central-1'
+}
+
+if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+  services = {
+    key: process.env.AWS_ACCESS_KEY_ID,
+    secret: process.env.AWS_SECRET_ACCESS_KEY,
+    bucket: 'bucket_name', // perhaps get it via env vars as well
+    region: process.env.AWS_S3_REGION
+  }
+}
+
+const otherService = {
+  key: process.env.AWS_OTHER_SERVICE_KEY_ID,
+  secret: process.env.AWS_OTHER_SERVICE_SECRET_ACCESS_KEY,
+  bucket: 'other_bucket',
+  region: process.env.AWS_OTHER_SERVICE_S3_REGION || 'eu-central-1'
+}
+
 const authorizer = new Authorizer(services)
+const authorizerOtherService = new Authorizer(otherService)
 
 Meteor.methods({
-  authorizeUpload: function (ops, metadata) {
+  authorize_upload: function (ops, metadata) {
+    check(ops, Object)
+    Match.test(metadata, Match.OneOf(Object, undefined, null))
     this.unblock()
     return authorizer.authorizeUpload(metadata, ops)
   },
-  authorize_delete: function (ops) {
+  deleteServerSide: function (ops) { // object contains paths: { paths = [fileName, fileName] }
+    check(ops, Object)
     this.unblock()
-    return authorizer.authorize_delete(ops)
+    return authorizer.deleteServerSide(ops)
+  },
+  authorize_upload_other_service: function (ops, metadata) {
+    check(ops, Object)
+    Match.test(metadata, Match.OneOf(Object, undefined, null))
+    this.unblock()
+    return authorizerOtherService.authorizeUpload(metadata, ops)
+  },
+  deleteServerSideOtherService: function (ops) {
+    check(ops, Object)
+    this.unblock()
+    return authorizer.deleteServerSide(ops)
   }
+  
+  // etc ...
 })
 
 ```
@@ -68,7 +112,7 @@ Concept: before start of upload trigger the showing of a spinner. If, for instan
 
 ``` javascript
 import { Meteor } from 'meteor/meteor'
-import { deleteFiles, uploadFile } from 's3up-meta/client'
+import { uploadFile } from 's3up-meta/client'
 import b64toBlob from '../../helpers/b64toBlob' // I use my own blob library
 
 export const UPLOAD_IMAGE_AWS = 'UPLOAD_IMAGE_AWS' // this should return a image URL as payload
@@ -126,17 +170,12 @@ const uploadImageAWS = (imageData, path, size) => {
 
 const deleteImageAWS = (path, oldImage) => {
   return dispatch => {
-    const paths = path === 'avatar' ? [`avatar/${oldImage}`, `avatar-h/${oldImage}`] : [`${path}/${oldImage}`] // I delete 2 avatar sizes.
     if (oldImage) {
-      deleteFiles({
-        authorizer: Meteor.call.bind(this, 'authorize_delete'),
-        paths,
-        deleteComplete: (err, res) => {
-          dispatch({
-            type: DELETE_IMAGE_AWS,
-            payload: err ? { err } : 'OK'
-          })
-        }
+      Meteor.call('deleteServerSide', { path }, err => {
+	dispatch({
+	  type: DELETE_IMAGE_AWS,
+	  payload: err ? { err } : 'OK'
+	})
       })
     }
   }
