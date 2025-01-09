@@ -7,7 +7,7 @@ import last from 'lodash.last'
 import isEmpty from 'lodash.isempty'
 import noop from 'lodash.noop'
 
-export default (file, { _id = uuidv4(), encoding = '', file_name = true, authorizer, metadata, path, acl, bucket, region, expiration, upload_event = noop}) => {
+export default (file, { _id = uuidv4(), encoding = '', file_name = true, authorizer, metadata, path, acl, bucket, region, expiration, uploadEvent = noop}) => {
   // Check required vars
   const cache_control = metadata.CacheControl || 'no-cache'
   const expires = metadata.Expires || '0'
@@ -35,6 +35,9 @@ export default (file, { _id = uuidv4(), encoding = '', file_name = true, authori
     case 'function':
       file_name = file_name(file)
       break
+    case 'string':
+      file_name = file_name
+      break
   }
 
   if (isEmpty(file_name)) {
@@ -57,7 +60,7 @@ export default (file, { _id = uuidv4(), encoding = '', file_name = true, authori
     status:'authorizing'
   }
 
-  upload_event(null, file_data)
+  uploadEvent(null, file_data)
 
   return authorizer({
       path,
@@ -96,7 +99,7 @@ export default (file, { _id = uuidv4(), encoding = '', file_name = true, authori
       const xhr = new XMLHttpRequest()
       xhr.upload.addEventListener('progress', event => {
         Session.set('glimpseUp', Math.floor(event.loaded / event.total * 100))
-        return upload_event(null, Object.assign(file_data, {
+        return uploadEvent(null, Object.assign(file_data, {
           loaded:event.loaded,
           total:event.total,
           percent_uploaded: Math.floor(((event.loaded / event.total) * 100)),
@@ -107,7 +110,7 @@ export default (file, { _id = uuidv4(), encoding = '', file_name = true, authori
       xhr.addEventListener('load', function() {
         if (xhr.status < 400) {
           delete Session.keys.glimpseUp
-          return upload_event(null, Object.assign(file_data, {
+          return uploadEvent(null, Object.assign(file_data, {
             percent_uploaded: 100,
             url:signature.url,
             secure_url:signature.secure_url,
@@ -115,13 +118,13 @@ export default (file, { _id = uuidv4(), encoding = '', file_name = true, authori
             status:'complete'
           }))
         } else {
-          return upload_event(new Error('Upload Failed Request Failed'), Object.assign(file_data, { status:'error' }))
+          return uploadEvent(new Error('Upload Failed Request Failed'), Object.assign(file_data, { status:'error' }))
         }
       })
 
-      xhr.addEventListener('error', () => upload_event(new Error('Upload Failed Network Error'), Object.assign(file_data, { status:'error' })))
+      xhr.addEventListener('error', () => uploadEvent(new Error('Upload Failed Network Error'), Object.assign(file_data, { status:'error' })))
 
-      xhr.addEventListener('abort', () => upload_event(new Error('Upload Failed User Aborted'), Object.assign(file_data, { status:'abort' })))
+      xhr.addEventListener('abort', () => uploadEvent(new Error('Upload Failed User Aborted'), Object.assign(file_data, { status:'abort' })))
 
       xhr.open('POST', signature.post_url,true)
 

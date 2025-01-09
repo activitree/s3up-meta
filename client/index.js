@@ -1,4 +1,4 @@
-import upload_files from './uploadFiles'
-import upload_file from './uploadFile'
+import uploadFiles from './uploadFiles'
+import uploadFile from './uploadFile'
 
-export { upload_file, upload_files }
+export { uploadFile, uploadFiles }

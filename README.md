@@ -144,7 +144,7 @@ const uploadImageAWS = (imageData, path, size) => {
       path, // to where I write in my bucket in S3
       type: 'image/jpeg', // or something else...PNG, PDF etc
       metadata, // see this constant above
-      upload_event: (err, res) => {
+      uploadEvent: (err, res) => {
         if (err) {
           dispatch({
             type: SET_STATE_UPLOADER,
@@ -183,7 +183,7 @@ const deleteImageAWS = (path, oldImage) => {
 
 ```
 
-Notice how `upload_files` require an `authorizer` function to communicate with the server. In Meteor this is a `Meteor.method` but you can use anything.
+Notice how `uploadFiles` require an `authorizer` function to communicate with the server. In Meteor this is a `Meteor.method` but you can use anything.
 deleteFiles takes place server side. File keys (S3 paths) are being sent to the Meteor server for deletion. Does not require authorisation since this doesn't require the slingshot principle (uploading from client directly to S3)
 
 ## Create your Amazon S3

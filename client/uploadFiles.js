@@ -5,7 +5,7 @@ import every from 'lodash.every'
 
 export default (files, ops) => {
   // const number_of_files = files.length
-  const { upload_event } = ops
+  const { uploadEvent } = ops
   let total_percent_uploaded = 0
   let completed = false
 
@@ -15,10 +15,10 @@ export default (files, ops) => {
     const fileImage = file.image
     // const fileSize = file.size
     uploadFile(fileImage, Object.assign(ops, {
-      upload_event(err, res) {
+      uploadEvent(err, res) {
         if (err) {
-          if (typeof upload_event === 'function') {
-            upload_event(err, Object.assign(res, { total_percent_uploaded }))
+          if (typeof uploadEvent === 'function') {
+            uploadEvent(err, Object.assign(res, { total_percent_uploaded }))
           }
           total_percent_uploaded = 0
           return
@@ -45,7 +45,7 @@ export default (files, ops) => {
           completed = true
         }
 
-        return (typeof upload_event === 'function' ? upload_event(null, { ...res, total_percent_uploaded: total_percent_uploaded, completed: completed }) : undefined)
+        return (typeof uploadEvent === 'function' ? uploadEvent(null, { ...res, total_percent_uploaded: total_percent_uploaded, completed: completed }) : undefined)
       }
     }))
   })
