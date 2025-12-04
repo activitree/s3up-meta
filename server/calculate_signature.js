@@ -1,12 +1,11 @@
-import Crypto, { HmacSHA256 } from 'crypto-js'
-import dayjs  from 'dayjs'
+import { createHmac } from 'crypto'
+import dayjs from 'dayjs'
 
 export default ({ policy, region, secret }) => {
-  const kDate = HmacSHA256(dayjs().format("YYYYMMDD"), `AWS4${secret}`)
-  const kRegion = HmacSHA256(region, kDate)
-  const kService = HmacSHA256("s3", kRegion)
-  const signature_key = HmacSHA256("aws4_request", kService)
+  const kDate = createHmac('sha256', `AWS4${secret}`).update(dayjs().format("YYYYMMDD")).digest()
+  const kRegion = createHmac('sha256', kDate).update(region).digest()
+  const kService = createHmac('sha256', kRegion).update("s3").digest()
+  const signature_key = createHmac('sha256', kService).update("aws4_request").digest()
 
-  return HmacSHA256(policy, signature_key)
-    .toString(Crypto.enc.Hex)
+  return createHmac('sha256', signature_key).update(policy).digest('hex')
 }
